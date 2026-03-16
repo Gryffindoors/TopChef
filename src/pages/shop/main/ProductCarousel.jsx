@@ -3,13 +3,13 @@ import useEmblaCarousel from "embla-carousel-react"
 import ProductCard from "./ProductCard"
 
 export default function ProductCarousel({ products }) {
-  // Added 'watchSlides' to help Embla track dynamic changes for the loop
+  // Added duration to the global options to smooth out all programmatic scrolls
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "start",
     dragFree: false,
     direction: "rtl",
-    containScroll: false // Vital for infinite loops to prevent snapping to ends
+    duration: 30, // Default is 25, 30-35 makes it feel weightier and smoother
   })
 
   const hintPlayed = useRef(false)
@@ -19,16 +19,15 @@ export default function ProductCarousel({ products }) {
     if (!emblaApi || hintPlayed.current || products.length < 2) return
 
     const timer = setTimeout(() => {
-      // scrollNext(jump) - using false for jump ensures animation
-      // We use a custom duration for the hint to make it elegant
-      emblaApi.scrollNext() 
+      // scrollNext(false) ensures it uses the animation duration
+      emblaApi.scrollNext(false)
 
       setTimeout(() => {
-        emblaApi.scrollPrev()
+        emblaApi.scrollPrev(false)
         hintPlayed.current = true
-      }, 1800) // Increased delay to allow the first move to finish
+      }, 900) // Space out the movements so they don't overlap
 
-    }, 1000)
+    }, 1200)
 
     return () => clearTimeout(timer)
   }, [emblaApi, products.length])
@@ -42,19 +41,24 @@ export default function ProductCarousel({ products }) {
   }
 
   return (
-    <div className="overflow-hidden mt-6" ref={emblaRef}>
-      {/* Note: Embla requires the 'flex' container to be the direct child of the ref.
-          The 'flex' property on items handles the width.
+    /* added 'w-full' and 'relative' to ensure the viewport has a reference point */
+    <div className="overflow-hidden mt-6 w-full relative" ref={emblaRef}>
+      
+      {/* The 'flex' container. 
+         Using -ml-4 (or -mr-4 for RTL) and ml-4 on items is the safest way 
+         to handle gaps in Embla without breaking the loop logic.
       */}
-      <div className="flex -mr-4"> {/* Negative margin to offset item padding */}
+      <div className="flex touch-pan-y">
         {products.map((product) => (
           <div
             key={product.id}
             className="
-              flex-[0_0_80%] 
+              relative
+              min-w-0 
+              flex-[0_0_85%] 
               sm:flex-[0_0_50%]
               lg:flex-[0_0_25%]
-              pr-4 
+              px-2
             "
           >
             <ProductCard product={product} />

@@ -3,8 +3,10 @@ import { Link } from "react-router";
 import { ShoppingCart, UtensilsCrossed, ChevronRight } from "lucide-react";
 import { useData } from "../../data/dataProvider";
 import OrderModal from "../../components/order/OrderModal";
+import { useNavigate } from "react-router";
 
 export default function MenuPage() {
+    const navigate = useNavigate();
     const { products, loading, error } = useData();
     const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -51,8 +53,8 @@ export default function MenuPage() {
             {/* TOP NAVIGATION BAR */}
             <div className="sticky top-0 z-30 bg-black/80 backdrop-blur-md border-b border-white/5 px-4 py-4">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
-                    <Link 
-                        to="/shop" 
+                    <Link
+                        to="/shop"
                         className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors group"
                     >
                         <div className="bg-neutral-900 p-2 rounded-lg group-hover:bg-red-600/20 transition-all">
@@ -60,7 +62,7 @@ export default function MenuPage() {
                         </div>
                         <span className="font-bold text-sm">العودة</span>
                     </Link>
-                    
+
                     <h1 className="text-xl font-black italic text-white tracking-tighter">قائمة الطعام</h1>
                 </div>
             </div>
@@ -92,7 +94,8 @@ export default function MenuPage() {
                                     {items.map((product) => (
                                         <div
                                             key={product.id}
-                                            className="group flex flex-col justify-between items-center text-center bg-neutral-900/40 hover:bg-neutral-800/60 border border-white/5 p-4 rounded-2xl transition-all duration-300 hover:border-red-900/50"
+                                            onClick={() => navigate(`/product/${product.id}`)}
+                                            className="group flex flex-col justify-between items-center text-center bg-neutral-900/40 hover:bg-neutral-800/60 border border-white/5 p-4 rounded-2xl transition-all duration-300 hover:border-red-900/50 cursor-pointer"
                                         >
                                             <div className="flex flex-col items-center gap-2 mb-4">
                                                 {product.is_offer && (
@@ -115,8 +118,10 @@ export default function MenuPage() {
 
                                             {/* Order Button */}
                                             <button
-                                                onClick={() => setSelectedProduct(product)}
-                                                className="w-full h-10 flex items-center justify-center bg-red-600 hover:bg-red-500 rounded-xl text-white shadow-lg shadow-red-900/20 active:scale-90 transition-all cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedProduct(product);
+                                                }} className="w-full h-10 flex items-center justify-center bg-red-600 hover:bg-red-500 rounded-xl text-white shadow-lg shadow-red-900/20 active:scale-90 transition-all cursor-pointer"
                                                 aria-label="إضافة إلى السلة"
                                             >
                                                 <ShoppingCart size={16} />
