@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+/* ---------- BASE LAYER ---------- */
+/* global styles and resets */
+
+@layer base {
+
+  body {
+    font-family: "Tajawal", sans-serif;
+    background: #0f0f0f;
+    color: white;
+  }
+
+}
+
+/* ---------- COMPONENT LAYER ---------- */
+/* reusable UI elements */
+
+@layer components {
+
+  .section-title {
+    background: #c00000;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  .product-card {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: #c00000;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+}
+
+@keyframes continuous-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-slow-spin {
+  /* 20 seconds for one full rotation = very smooth and subtle */
+  animation: continuous-spin 10s linear infinite;
+}
+
+
+@keyframes flyToCart {
+
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.2) translate(200px, -500px);
+    opacity: 0;
+  }
+
+}
+
+.animate-flyToCart {
+  animation: flyToCart 700ms ease-out forwards;
+}
+
+/* Custom Global Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  /* Slim width */
+  height: 6px;
+  /* For horizontal scroll */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  /* Makes the track invisible */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  /* Subtle white-transparent */
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(220, 38, 38, 0.4);
+  /* Subtle red glow on hover to match your theme */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
