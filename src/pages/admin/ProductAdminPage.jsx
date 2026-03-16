@@ -3,6 +3,7 @@ import { useNavigate } from "react-router"
 
 import ProductTable from "../../components/admin/ProductTable"
 import ProductModal from "../../components/admin/ProductModal"
+import ProductForm from "../../components/admin/ProductForm"
 
 import {
   getAdminProducts,
@@ -167,8 +168,14 @@ export default function ProductAdminPage() {
         </div>
 
         {/* INLINE ADD FORM - Slides down under header */}
-        {modalOpen && (
-          <div className="max-w-4xl mx-auto px-4 pb-6 animate-in slide-in-from-top-4 duration-300">
+        {/* Animated Add Product Form */}
+        <div
+          className={`
+    overflow-hidden transition-all duration-500 ease-in-out
+    ${modalOpen ? "max-h-300 opacity-100" : "max-h-0 opacity-0 pointer-events-none"}
+  `}
+        >
+          <div className="max-w-4xl mx-auto px-4 pb-6">
             <div className="bg-neutral-900/40 rounded-3xl border border-white/5 p-1">
               <ProductModal
                 product={null}
@@ -177,7 +184,7 @@ export default function ProductAdminPage() {
               />
             </div>
           </div>
-        )}
+        </div>
       </header>
 
       <main className="max-w-7xl mx-auto p-4 space-y-6">

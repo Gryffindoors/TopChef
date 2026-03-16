@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router";
-import { ShoppingCart, Tag, UtensilsCrossed, ChevronRight, Home } from "lucide-react";
+import { ShoppingCart, UtensilsCrossed, ChevronRight } from "lucide-react";
 import { useData } from "../../data/dataProvider";
 import OrderModal from "../../components/order/OrderModal";
 
@@ -50,7 +50,7 @@ export default function MenuPage() {
         <div className="min-h-screen bg-black" dir="rtl">
             {/* TOP NAVIGATION BAR */}
             <div className="sticky top-0 z-30 bg-black/80 backdrop-blur-md border-b border-white/5 px-4 py-4">
-                <div className="max-w-4xl mx-auto flex justify-between items-center">
+                <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <Link 
                         to="/shop" 
                         className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors group"
@@ -65,7 +65,7 @@ export default function MenuPage() {
                 </div>
             </div>
 
-            <div className="max-w-4xl mx-auto px-4 py-8 space-y-12 pb-32">
+            <div className="max-w-7xl mx-auto px-4 py-8 space-y-12 pb-32">
                 {Object.entries(grouped).map(([category, subs]) => (
                     <section key={category} className="animate-in fade-in slide-in-from-bottom-4 duration-700">
 
@@ -87,41 +87,39 @@ export default function MenuPage() {
                                     {subcategory}
                                 </h3>
 
-                                {/* Product Grid */}
-                                <div className="grid gap-4">
+                                {/* Product Grid: 3 columns on small/medium, 6 on large */}
+                                <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
                                     {items.map((product) => (
                                         <div
                                             key={product.id}
-                                            className="group flex justify-between items-center bg-neutral-900/40 hover:bg-neutral-800/60 border border-white/5 p-4 rounded-2xl transition-all duration-300 hover:border-red-900/50"
+                                            className="group flex flex-col justify-between items-center text-center bg-neutral-900/40 hover:bg-neutral-800/60 border border-white/5 p-4 rounded-2xl transition-all duration-300 hover:border-red-900/50"
                                         >
-                                            <div className="flex flex-col gap-1.5">
-                                                <div className="flex items-center gap-3">
-                                                    <h4 className="font-bold text-lg text-gray-100 group-hover:text-red-400 transition-colors">
-                                                        {product.name}
-                                                    </h4>
-                                                    {product.is_offer && (
-                                                        <span className="flex items-center gap-1 text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-md font-black italic tracking-tighter">
-                                                            OFFER
-                                                        </span>
-                                                    )}
-                                                </div>
+                                            <div className="flex flex-col items-center gap-2 mb-4">
+                                                {product.is_offer && (
+                                                    <span className="inline-block text-[8px] bg-red-600 text-white px-2 py-0.5 rounded-md font-black italic tracking-tighter uppercase">
+                                                        OFFER
+                                                    </span>
+                                                )}
+                                                <h4 className="font-bold text-sm text-gray-100 group-hover:text-red-400 transition-colors line-clamp-2 min-h-10">
+                                                    {product.name}
+                                                </h4>
 
                                                 {/* Price Display */}
-                                                <div className="flex items-baseline gap-1">
-                                                    <span className="text-red-500 font-mono font-bold text-xl">
+                                                <div className="flex items-baseline justify-center gap-0.5">
+                                                    <span className="text-red-500 font-mono font-bold text-lg">
                                                         {product.is_offer ? product.price_offer : product.price_regular}
                                                     </span>
-                                                    <span className="text-[10px] text-gray-500 font-bold">ج.م</span>
+                                                    <span className="text-[8px] text-gray-500 font-bold">ج.م</span>
                                                 </div>
                                             </div>
 
                                             {/* Order Button */}
                                             <button
                                                 onClick={() => setSelectedProduct(product)}
-                                                className="size-12 flex items-center justify-center bg-red-600 hover:bg-red-500 rounded-xl text-white shadow-lg shadow-red-900/20 active:scale-90 transition-all cursor-pointer"
+                                                className="w-full h-10 flex items-center justify-center bg-red-600 hover:bg-red-500 rounded-xl text-white shadow-lg shadow-red-900/20 active:scale-90 transition-all cursor-pointer"
                                                 aria-label="إضافة إلى السلة"
                                             >
-                                                <ShoppingCart size={20} />
+                                                <ShoppingCart size={16} />
                                             </button>
                                         </div>
                                     ))}

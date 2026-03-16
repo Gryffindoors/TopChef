@@ -1,4 +1,4 @@
-import ProductModal from "./ProductModal" 
+import ProductModal from "./ProductModal"
 import React from "react"
 
 export default function ProductTable({
@@ -55,15 +55,31 @@ export default function ProductTable({
                 </td>
               </tr>
               {/* Inline Edit Row */}
-              {editingProduct?.id === product.id && (
-                <tr>
-                  <td colSpan="7" className="p-0 bg-neutral-900/30">
-                    <div className="px-4">
-                      <ProductModal product={product} onSave={onSave} onClose={onClose} />
+              <tr key={`${product.id}-edit`}>
+                <td colSpan="7" className="p-0 border-none">
+                  <div
+                    className={`
+        grid overflow-hidden
+        transition-[grid-template-rows,opacity] duration-700 ease-in-out
+        ${editingProduct?.id === product.id
+                        ? "grid-rows-[1fr] opacity-100"
+                        : "grid-rows-[0fr] opacity-0"}
+      `}
+                  >
+                    <div className="overflow-hidden">
+                      {editingProduct?.id === product.id && (
+                        <div className="px-4 pb-4">
+                          <ProductModal
+                            product={product}
+                            onSave={onSave}
+                            onClose={onClose}
+                          />
+                        </div>
+                      )}
                     </div>
-                  </td>
-                </tr>
-              )}
+                  </div>
+                </td>
+              </tr>
             </React.Fragment>
           ))}
         </tbody>

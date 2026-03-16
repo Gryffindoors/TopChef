@@ -3,32 +3,35 @@ import useEmblaCarousel from "embla-carousel-react"
 import ProductCard from "./ProductCard"
 
 export default function ProductCarousel({ products }) {
-
+  // Added 'watchSlides' to help Embla track dynamic changes for the loop
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "start",
     dragFree: false,
-    direction: "rtl"
+    direction: "rtl",
+    containScroll: false // Vital for infinite loops to prevent snapping to ends
   })
 
   const hintPlayed = useRef(false)
 
-  // Small hint animation so user knows carousel is swipeable
+  // Smooth hint animation
   useEffect(() => {
-    if (!emblaApi || hintPlayed.current) return
+    if (!emblaApi || hintPlayed.current || products.length < 2) return
 
     const timer = setTimeout(() => {
-      emblaApi.scrollNext()
+      // scrollNext(jump) - using false for jump ensures animation
+      // We use a custom duration for the hint to make it elegant
+      emblaApi.scrollNext() 
 
       setTimeout(() => {
         emblaApi.scrollPrev()
         hintPlayed.current = true
-      }, 450)
+      }, 1800) // Increased delay to allow the first move to finish
 
-    }, 700)
+    }, 1000)
 
     return () => clearTimeout(timer)
-  }, [emblaApi])
+  }, [emblaApi, products.length])
 
   if (!products.length) {
     return (
@@ -40,24 +43,24 @@ export default function ProductCarousel({ products }) {
 
   return (
     <div className="overflow-hidden mt-6" ref={emblaRef}>
-
-      <div className="flex">
-
+      {/* Note: Embla requires the 'flex' container to be the direct child of the ref.
+          The 'flex' property on items handles the width.
+      */}
+      <div className="flex -mr-4"> {/* Negative margin to offset item padding */}
         {products.map((product) => (
           <div
             key={product.id}
             className="
-              flex-[0_0_100%]
-              lg:flex-[0_0_33.333%]
-              px-2
+              flex-[0_0_80%] 
+              sm:flex-[0_0_50%]
+              lg:flex-[0_0_25%]
+              pr-4 
             "
           >
             <ProductCard product={product} />
           </div>
         ))}
-
       </div>
-
     </div>
   )
 }

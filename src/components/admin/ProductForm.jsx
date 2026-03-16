@@ -61,14 +61,15 @@ export default function ProductForm({ product, onSave, onCancel }) {
             finalValue = sanitizeNumbers(finalValue)
         }
 
-        // Cascading Logic for Categories
+        // Cascading Logic: Default unit is set, but can be changed later
         if (name === "category") {
             const selectedOption = PRODUCT_OPTIONS[value]
             setForm(prev => ({
                 ...prev,
                 category: value,
+                // Only auto-update the unit if we have a match in PRODUCT_OPTIONS
                 unit: selectedOption ? selectedOption.unit : prev.unit,
-                subcategory: "" // Reset subcategory when category changes
+                subcategory: ""
             }))
             return
         }
@@ -150,7 +151,21 @@ export default function ProductForm({ product, onSave, onCancel }) {
                     {/* Unit (Locked to Category) */}
                     <div>
                         <label className="block mb-1.5 text-xs font-bold text-neutral-400 mr-1">وحدة القياس</label>
-                        <input name="unit" value={form.unit} readOnly className={`${inputBase} bg-white/10 cursor-not-allowed opacity-70`} />
+                        <select
+                            name="unit"
+                            value={form.unit}
+                            onChange={handleChange}
+                            className={inputBase}
+                        >
+                            <option value="kg" className="bg-neutral-900 text-white">كيلو (kg)</option>
+                            <option value="plate" className="bg-neutral-900 text-white">طبق (plate)</option>
+                            <option value="sandwich" className="bg-neutral-900 text-white">ساندوتش (sandwich)</option>
+                            <option value="pc" className="bg-neutral-900 text-white">قطعة (pc)</option>
+                            <option value="jar" className="bg-neutral-900 text-white">برطمان (jar)</option>
+                        </select>
+                        <p className="text-[10px] text-neutral-600 mt-1 mr-1">
+                            يتم التغيير تلقائياً عند اختيار الفئة، ويمكنك تعديله هنا.
+                        </p>
                     </div>
                 </div>
             </div>

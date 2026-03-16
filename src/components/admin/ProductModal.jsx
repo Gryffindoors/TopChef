@@ -20,23 +20,11 @@ export default function ProductModal({ product, onSave, onClose }) {
     <div
       ref={modalRef}
       dir="rtl"
-      className="
-        w-full overflow-hidden
-        bg-neutral-900/50 md:rounded-3xl rounded-xl
-        border border-white/10 
-        shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300
-        my-4
-      "
+      className="w-full overflow-hidden bg-neutral-900/50 md:rounded-3xl rounded-xl border border-white/10 shadow-2xl animate-fade-in my-4"
     >
-      {/* Mobile Drag Handle - kept for aesthetic continuity */}
       <div className="md:hidden w-12 h-1 bg-white/20 rounded-full mx-auto mt-3 mb-1" />
-      
       <div className="p-6">
-        <ProductForm
-          product={product}
-          onSave={onSave}
-          onCancel={onClose}
-        />
+        <ProductForm product={product} onSave={onSave} onCancel={onClose} />
       </div>
     </div>
   )
