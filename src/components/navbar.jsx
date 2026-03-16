@@ -3,7 +3,7 @@ import { ShoppingCart, Menu, X, LogOut, LayoutDashboard, ShoppingBag } from "luc
 import { useCart } from "../pages/shop/cartProvider";
 import { supabase } from "../api/supabase"; // Import your supabase client
 import { logout } from "../api/supabase";   // Import your logout function
-import logo from "../assets/logo.jpg";
+import logo from "../assets/Logo.jpg";
 import VersionBadge from "./VersionBadge";
 import { Link, useNavigate } from "react-router";
 
