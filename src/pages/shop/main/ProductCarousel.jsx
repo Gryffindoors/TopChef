@@ -1,36 +1,25 @@
 import { useEffect, useRef } from "react"
-import useEmblaCarousel from "embla-carousel-react"
 import ProductCard from "./ProductCard"
 
 export default function ProductCarousel({ products }) {
-  // Added duration to the global options to smooth out all programmatic scrolls
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: "start",
-    dragFree: false,
-    direction: "rtl",
-    duration: 30, // Default is 25, 30-35 makes it feel weightier and smoother
-  })
+  const scrollRef = useRef(null)
 
-  const hintPlayed = useRef(false)
-
-  // Smooth hint animation
+  // Smooth hint animation using native scroll
   useEffect(() => {
-    if (!emblaApi || hintPlayed.current || products.length < 2) return
+    const el = scrollRef.current
+    if (!el || products.length < 2) return
 
     const timer = setTimeout(() => {
-      // scrollNext(false) ensures it uses the animation duration
-      emblaApi.scrollNext(false)
+      // Scroll slightly to the left (negative for RTL) to show more items
+      el.scrollTo({ left: -100, behavior: "smooth" })
 
       setTimeout(() => {
-        emblaApi.scrollPrev(false)
-        hintPlayed.current = true
-      }, 900) // Space out the movements so they don't overlap
-
+        el.scrollTo({ left: 0, behavior: "smooth" })
+      }, 800)
     }, 1200)
 
     return () => clearTimeout(timer)
-  }, [emblaApi, products.length])
+  }, [products.length])
 
   if (!products.length) {
     return (
@@ -41,29 +30,43 @@ export default function ProductCarousel({ products }) {
   }
 
   return (
-    /* added 'w-full' and 'relative' to ensure the viewport has a reference point */
-    <div className="overflow-hidden mt-6 w-full relative" ref={emblaRef}>
-      
-      {/* The 'flex' container. 
-         Using -ml-4 (or -mr-4 for RTL) and ml-4 on items is the safest way 
-         to handle gaps in Embla without breaking the loop logic.
+    <div className="relative w-full mt-6">
+      {/* Native CSS Carousel:
+          - overflow-x-auto: enables horizontal scroll
+          - snap-x snap-mandatory: forces cards to stop perfectly in view
+          - no-scrollbar: utility to hide scrollbar (optional)
       */}
-      <div className="flex touch-pan-y">
+      <div 
+        ref={scrollRef}
+        className="
+          flex 
+          overflow-x-auto 
+          snap-x 
+          snap-mandatory 
+          scroll-smooth 
+          pb-4
+          gap-4
+          [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+        "
+        dir="rtl"
+      >
         {products.map((product) => (
           <div
             key={product.id}
             className="
-              relative
-              min-w-0 
-              flex-[0_0_85%] 
-              sm:flex-[0_0_50%]
-              lg:flex-[0_0_25%]
-              px-2
+              flex-[0_0_75%] 
+              sm:flex-[0_0_45%]
+              lg:flex-[0_0_22%]
+              snap-start
+              snap-always
             "
           >
             <ProductCard product={product} />
           </div>
         ))}
+        
+        {/* Invisible spacer to ensure padding-left/right is respected in the scroll */}
+        <div className="flex-[0_0_1px] invisible" />
       </div>
     </div>
   )
