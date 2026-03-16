@@ -5,11 +5,11 @@ import App from './App.jsx'
 import { DataProvider } from './data/dataProvider.jsx'
 import { CartProvider } from './pages/shop/cartProvider.jsx'
 import { OrderModalProvider } from './components/order/orderModalProvider.jsx'
-import { BrowserRouter } from 'react-router'
+import { BrowserRouter, HashRouter } from 'react-router'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <DataProvider>
         <CartProvider>
           <OrderModalProvider>
@@ -17,6 +17,6 @@ createRoot(document.getElementById('root')).render(
           </OrderModalProvider>
         </CartProvider>
       </DataProvider>
-    </BrowserRouter>
+    </HashRouter>
   </StrictMode>,
 )
